@@ -19,12 +19,8 @@ var IUniswapV2Pair = _interopDefault(require('@uniswap/v2-core/build/IUniswapV2P
 
 var _FACTORY_ADDRESS, _SOLIDITY_TYPE_MAXIMA;
 (function (ChainId) {
-  ChainId[ChainId["MUMBAI"] = 80001] = "MUMBAI";
-  ChainId[ChainId["MATIC"] = 137] = "MATIC";
-  ChainId[ChainId["DOEGCHAIN_TESTNET"] = 568] = "DOEGCHAIN_TESTNET";
-  ChainId[ChainId["DOGECHAIN"] = 2000] = "DOGECHAIN";
-  ChainId[ChainId["ZKTESTNET"] = 1442] = "ZKTESTNET";
-  ChainId[ChainId["ZKEVM"] = 1101] = "ZKEVM";
+  ChainId[ChainId["SEPOLIA"] = 11155111] = "SEPOLIA";
+  ChainId[ChainId["BASE"] = 8453] = "BASE"; //8453
 })(exports.ChainId || (exports.ChainId = {}));
 (function (TradeType) {
   TradeType[TradeType["EXACT_INPUT"] = 0] = "EXACT_INPUT";
@@ -35,8 +31,9 @@ var _FACTORY_ADDRESS, _SOLIDITY_TYPE_MAXIMA;
   Rounding[Rounding["ROUND_HALF_UP"] = 1] = "ROUND_HALF_UP";
   Rounding[Rounding["ROUND_UP"] = 2] = "ROUND_UP";
 })(exports.Rounding || (exports.Rounding = {}));
-var FACTORY_ADDRESS = (_FACTORY_ADDRESS = {}, _FACTORY_ADDRESS[exports.ChainId.MATIC] = "0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32", _FACTORY_ADDRESS[exports.ChainId.DOGECHAIN] = "0xC3550497E591Ac6ed7a7E03ffC711CfB7412E57F", _FACTORY_ADDRESS[exports.ChainId.MUMBAI] = "0xC3550497E591Ac6ed7a7E03ffC711CfB7412E57F", _FACTORY_ADDRESS[exports.ChainId.ZKEVM] = "0xC3550497E591Ac6ed7a7E03ffC711CfB7412E57F", _FACTORY_ADDRESS[exports.ChainId.ZKTESTNET] = "0xC3550497E591Ac6ed7a7E03ffC711CfB7412E57F", _FACTORY_ADDRESS[exports.ChainId.DOEGCHAIN_TESTNET] = "0xC3550497E591Ac6ed7a7E03ffC711CfB7412E57F", _FACTORY_ADDRESS);
-var INIT_CODE_HASH = '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f';
+// TODO: FACTORY_ADDRESS
+var FACTORY_ADDRESS = (_FACTORY_ADDRESS = {}, _FACTORY_ADDRESS[exports.ChainId.SEPOLIA] = "0xb92Bb7731d92705a1d2D63f80a55c81B6437a1c5", _FACTORY_ADDRESS[exports.ChainId.BASE] = "0xC3550497E591Ac6ed7a7E03ffC711CfB7412E57F", _FACTORY_ADDRESS);
+var INIT_CODE_HASH = '0x0ac14d834b4c80f5eeb7e01253f963e55ab38ac98196e2e57ebac13e2afc9fd6';
 var MINIMUM_LIQUIDITY = /*#__PURE__*/JSBI.BigInt(1000);
 // exports for internal consumption
 var ZERO = /*#__PURE__*/JSBI.BigInt(0);
@@ -388,7 +385,7 @@ function currencyEquals(currencyA, currencyB) {
     return currencyA === currencyB;
   }
 }
-var WETH = (_WETH = {}, _WETH[exports.ChainId.MUMBAI] = /*#__PURE__*/new Token(exports.ChainId.MUMBAI, '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889', 18, 'WMATIC', 'Wrapped Matic'), _WETH[exports.ChainId.MATIC] = /*#__PURE__*/new Token(exports.ChainId.MATIC, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'WMATIC', 'Wrapped Matic'), _WETH[exports.ChainId.DOEGCHAIN_TESTNET] = /*#__PURE__*/new Token(exports.ChainId.DOEGCHAIN_TESTNET, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'WDOGE', 'Wrapped Doge'), _WETH[exports.ChainId.DOGECHAIN] = /*#__PURE__*/new Token(exports.ChainId.DOGECHAIN, '0xB7ddC6414bf4F5515b52D8BdD69973Ae205ff101', 18, 'WDOGE', 'Wrapped Doge'), _WETH[exports.ChainId.ZKTESTNET] = /*#__PURE__*/new Token(exports.ChainId.ZKTESTNET, '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32', 18, 'WETH', 'Wrapped Ether'), _WETH[exports.ChainId.ZKEVM] = /*#__PURE__*/new Token(exports.ChainId.ZKEVM, '0x4F9A0e7FD2Bf6067db6994CF12E4495Df938E6e9', 18, 'WETH', 'Wrapped Ether'), _WETH);
+var WETH = (_WETH = {}, _WETH[exports.ChainId.SEPOLIA] = /*#__PURE__*/new Token(exports.ChainId.SEPOLIA, '0x30B2F2E0359B61D812F4a1860EEEaCc5b513FB64', 18, 'WETH', 'Wrapped Ether'), _WETH[exports.ChainId.BASE] = /*#__PURE__*/new Token(exports.ChainId.BASE, '0x4200000000000000000000000000000000000006', 18, 'WETH', 'Wrapped Ether'), _WETH);
 
 var _toSignificantRoundin, _toFixedRounding;
 var Decimal = /*#__PURE__*/toFormat(_Decimal);
