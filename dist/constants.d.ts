@@ -17,7 +17,7 @@ export declare const FACTORY_ADDRESS: {
     11155111: string;
     8453: string;
 };
-export declare const INIT_CODE_HASH = "0x0ac14d834b4c80f5eeb7e01253f963e55ab38ac98196e2e57ebac13e2afc9fd6";
+export declare const INIT_CODE_HASH = "0xeaffb02e0852e2391eea302a843b596991773e7df7182de2a2404f263c6e4b10";
 export declare const MINIMUM_LIQUIDITY: JSBI;
 export declare const ZERO: JSBI;
 export declare const ONE: JSBI;
