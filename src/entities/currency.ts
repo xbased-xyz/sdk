@@ -1,5 +1,5 @@
 import JSBI from 'jsbi'
-import { ChainId } from '../constants'
+
 import { SolidityType } from '../constants'
 import { validateSolidityTypeInstance } from '../utils'
 
@@ -13,25 +13,8 @@ export class Currency {
   public readonly symbol?: string
   public readonly name?: string
 
-  /**
-   * The only instance of the base class `Currency`.
-   */
+  public static readonly ETHER: Currency = new Currency(18, 'ETH', 'Ether')
 
-  public static readonly ETHER = {
-    [ChainId.MUMBAI]: new Currency(18, 'MATIC', 'Matic'),
-    [ChainId.MATIC]: new Currency(18, 'MATIC', 'Matic'),
-    [ChainId.DOEGCHAIN_TESTNET]: new Currency(18, 'WDOGE', 'Wrapped Doge'),
-    [ChainId.DOGECHAIN]: new Currency(18, 'WDOGE', 'Wrapped Doge'),
-    [ChainId.ZKTESTNET]: new Currency(18, 'ETH', 'Ether'),
-    [ChainId.ZKEVM]: new Currency(18, 'ETH', 'Ether'),
-  }
-
-  /**
-   * Constructs an instance of the base class `Currency`. The only instance of the base class `Currency` is `Currency.ETHER`.
-   * @param decimals decimals of the currency
-   * @param symbol symbol of the currency
-   * @param name of the currency
-   */
   protected constructor(decimals: number, symbol?: string, name?: string) {
     validateSolidityTypeInstance(JSBI.BigInt(decimals), SolidityType.uint8)
 

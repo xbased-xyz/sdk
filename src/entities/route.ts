@@ -13,7 +13,7 @@ export class Route {
   public readonly output: Currency
   public readonly midPrice: Price
 
-  public constructor(pairs: Pair[], input: Currency, output?: Currency) {
+  constructor(pairs: Pair[], input: Currency, output?: Currency) {
     invariant(pairs.length > 0, 'PAIRS')
     invariant(
       pairs.every(pair => pair.chainId === pairs[0].chainId),
@@ -21,13 +21,13 @@ export class Route {
     )
     invariant(
       (input instanceof Token && pairs[0].involvesToken(input)) ||
-        (input === ETHER[pairs[0].chainId] && pairs[0].involvesToken(WETH[pairs[0].chainId])),
+        (input === ETHER && pairs[0].involvesToken(WETH[pairs[0].chainId])),
       'INPUT'
     )
     invariant(
       typeof output === 'undefined' ||
         (output instanceof Token && pairs[pairs.length - 1].involvesToken(output)) ||
-        (output === ETHER[pairs[0].chainId] && pairs[pairs.length - 1].involvesToken(WETH[pairs[0].chainId])),
+        (output === ETHER && pairs[pairs.length - 1].involvesToken(WETH[pairs[0].chainId])),
       'OUTPUT'
     )
 
@@ -46,7 +46,7 @@ export class Route {
     this.output = output ?? path[path.length - 1]
   }
 
-  public get chainId(): ChainId {
+  get chainId(): ChainId {
     return this.pairs[0].chainId
   }
 }

@@ -1,6 +1,7 @@
 import JSBI from 'jsbi';
 export declare type BigintIsh = JSBI | bigint | string;
 export declare enum ChainId {
+    MAINNET = 1,
     SEPOLIA = 11155111,
     BASE = 8453
 }
@@ -17,7 +18,7 @@ export declare const FACTORY_ADDRESS: {
     11155111: string;
     8453: string;
 };
-export declare const INIT_CODE_HASH = "0x0ac14d834b4c80f5eeb7e01253f963e55ab38ac98196e2e57ebac13e2afc9fd6";
+export declare const INIT_CODE_HASH = "0ac14d834b4c80f5eeb7e01253f963e55ab38ac98196e2e57ebac13e2afc9fd6";
 export declare const MINIMUM_LIQUIDITY: JSBI;
 export declare const ZERO: JSBI;
 export declare const ONE: JSBI;

@@ -12,12 +12,8 @@ import { Pair } from './pair'
 import { Route } from './route'
 import { currencyEquals, Token, WETH } from './token'
 
-/**
- * Returns the percent difference between the mid price and the execution price, i.e. price impact.
- * @param midPrice mid price before the trade
- * @param inputAmount the input amount of the trade
- * @param outputAmount the output amount of the trade
- */
+// returns the percent difference between the mid price and the execution price
+// we call this price impact in the UI
 function computePriceImpact(midPrice: Price, inputAmount: CurrencyAmount, outputAmount: CurrencyAmount): Percent {
   const exactQuote = midPrice.raw.multiply(inputAmount.raw)
   // calculate slippage := (exactQuote - outputAmount) / exactQuote
@@ -89,49 +85,32 @@ export interface BestTradeOptions {
  */
 function wrappedAmount(currencyAmount: CurrencyAmount, chainId: ChainId): TokenAmount {
   if (currencyAmount instanceof TokenAmount) return currencyAmount
-  if (currencyAmount.currency === ETHER[chainId]) return new TokenAmount(WETH[chainId], currencyAmount.raw)
+  if (currencyAmount.currency === ETHER) return new TokenAmount(WETH[chainId], currencyAmount.raw)
   invariant(false, 'CURRENCY')
 }
 
 function wrappedCurrency(currency: Currency, chainId: ChainId): Token {
   if (currency instanceof Token) return currency
-  if (currency === ETHER[chainId]) return WETH[chainId]
+  if (currency === ETHER) return WETH[chainId]
   invariant(false, 'CURRENCY')
 }
 
-/**
- * Represents a trade executed against a list of pairs.
- * Does not account for slippage, i.e. trades that front run this trade and move the price.
- */
 export class Trade {
-  /**
-   * The route of the trade, i.e. which pairs the trade goes through.
-   */
   public readonly route: Route
-  /**
-   * The type of the trade, either exact in or exact out.
-   */
   public readonly tradeType: TradeType
-  /**
-   * The input amount for the trade assuming no slippage.
-   */
   public readonly inputAmount: CurrencyAmount
-  /**
-   * The output amount for the trade assuming no slippage.
-   */
   public readonly outputAmount: CurrencyAmount
-  /**
-   * The price expressed in terms of output amount/input amount.
-   */
+  // the price expressed in terms of output/input
   public readonly executionPrice: Price
-  /**
-   * The mid price after the trade executes assuming no slippage.
-   */
+  // the mid price after the trade executes assuming zero slippage
   public readonly nextMidPrice: Price
-  /**
-   * The percent difference between the mid price before the trade and the trade execution price.
-   */
+  // the percent difference between the mid price before the trade and the price after the trade
   public readonly priceImpact: Percent
+
+  // this is a misnomer for price impact, but kept for compatibility
+  public get slippage(): Percent {
+    return this.priceImpact
+  }
 
   /**
    * Constructs an exact in trade with the given amount in and route
@@ -179,14 +158,14 @@ export class Trade {
     this.inputAmount =
       tradeType === TradeType.EXACT_INPUT
         ? amount
-        : route.input === ETHER[route.pairs[0].chainId]
-        ? CurrencyAmount.ether(amounts[0].raw, route.pairs[0].chainId)
+        : route.input === ETHER
+        ? CurrencyAmount.ether(amounts[0].raw)
         : amounts[0]
     this.outputAmount =
       tradeType === TradeType.EXACT_OUTPUT
         ? amount
-        : route.output === ETHER[route.pairs[0].chainId]
-        ? CurrencyAmount.ether(amounts[amounts.length - 1].raw, route.pairs[0].chainId)
+        : route.output === ETHER
+        ? CurrencyAmount.ether(amounts[amounts.length - 1].raw)
         : amounts[amounts.length - 1]
     this.executionPrice = new Price(
       this.inputAmount.currency,
@@ -198,10 +177,7 @@ export class Trade {
     this.priceImpact = computePriceImpact(route.midPrice, this.inputAmount, this.outputAmount)
   }
 
-  /**
-   * Get the minimum amount that must be received from this trade for the given slippage tolerance
-   * @param slippageTolerance tolerance of unfavorable slippage from the execution price of this trade
-   */
+  // get the minimum amount that must be received from this trade for the given slippage tolerance
   public minimumAmountOut(slippageTolerance: Percent): CurrencyAmount {
     invariant(!slippageTolerance.lessThan(ZERO), 'SLIPPAGE_TOLERANCE')
     if (this.tradeType === TradeType.EXACT_OUTPUT) {
@@ -213,14 +189,11 @@ export class Trade {
         .multiply(this.outputAmount.raw).quotient
       return this.outputAmount instanceof TokenAmount
         ? new TokenAmount(this.outputAmount.token, slippageAdjustedAmountOut)
-        : CurrencyAmount.ether(slippageAdjustedAmountOut, this.route.pairs[0].chainId)
+        : CurrencyAmount.ether(slippageAdjustedAmountOut)
     }
   }
 
-  /**
-   * Get the maximum amount in that can be spent via this trade for the given slippage tolerance
-   * @param slippageTolerance tolerance of unfavorable slippage from the execution price of this trade
-   */
+  // get the maximum amount in that can be spent via this trade for the given slippage tolerance
   public maximumAmountIn(slippageTolerance: Percent): CurrencyAmount {
     invariant(!slippageTolerance.lessThan(ZERO), 'SLIPPAGE_TOLERANCE')
     if (this.tradeType === TradeType.EXACT_INPUT) {
@@ -229,24 +202,14 @@ export class Trade {
       const slippageAdjustedAmountIn = new Fraction(ONE).add(slippageTolerance).multiply(this.inputAmount.raw).quotient
       return this.inputAmount instanceof TokenAmount
         ? new TokenAmount(this.inputAmount.token, slippageAdjustedAmountIn)
-        : CurrencyAmount.ether(slippageAdjustedAmountIn, this.route.pairs[0].chainId)
+        : CurrencyAmount.ether(slippageAdjustedAmountIn)
     }
   }
 
-  /**
-   * Given a list of pairs, and a fixed amount in, returns the top `maxNumResults` trades that go from an input token
-   * amount to an output token, making at most `maxHops` hops.
-   * Note this does not consider aggregation, as routes are linear. It's possible a better route exists by splitting
-   * the amount in among multiple routes.
-   * @param pairs the pairs to consider in finding the best trade
-   * @param currencyAmountIn exact amount of input currency to spend
-   * @param currencyOut the desired currency out
-   * @param maxNumResults maximum number of results to return
-   * @param maxHops maximum number of hops a returned trade can make, e.g. 1 hop goes through a single pair
-   * @param currentPairs used in recursion; the current list of pairs
-   * @param originalAmountIn used in recursion; the original value of the currencyAmountIn parameter
-   * @param bestTrades used in recursion; the current list of best trades
-   */
+  // given a list of pairs, and a fixed amount in, returns the top `maxNumResults` trades that go from an input token
+  // amount to an output token, making at most `maxHops` hops
+  // note this does not consider aggregation, as routes are linear. it's possible a better route exists by splitting
+  // the amount in among multiple routes.
   public static bestTradeExactIn(
     pairs: Pair[],
     currencyAmountIn: CurrencyAmount,
@@ -320,21 +283,11 @@ export class Trade {
     return bestTrades
   }
 
-  /**
-   * similar to the above method but instead targets a fixed output amount
-   * given a list of pairs, and a fixed amount out, returns the top `maxNumResults` trades that go from an input token
-   * to an output token amount, making at most `maxHops` hops
-   * note this does not consider aggregation, as routes are linear. it's possible a better route exists by splitting
-   * the amount in among multiple routes.
-   * @param pairs the pairs to consider in finding the best trade
-   * @param currencyIn the currency to spend
-   * @param currencyAmountOut the exact amount of currency out
-   * @param maxNumResults maximum number of results to return
-   * @param maxHops maximum number of hops a returned trade can make, e.g. 1 hop goes through a single pair
-   * @param currentPairs used in recursion; the current list of pairs
-   * @param originalAmountOut used in recursion; the original value of the currencyAmountOut parameter
-   * @param bestTrades used in recursion; the current list of best trades
-   */
+  // similar to the above method but instead targets a fixed output amount
+  // given a list of pairs, and a fixed amount out, returns the top `maxNumResults` trades that go from an input token
+  // to an output token amount, making at most `maxHops` hops
+  // note this does not consider aggregation, as routes are linear. it's possible a better route exists by splitting
+  // the amount in among multiple routes.
   public static bestTradeExactOut(
     pairs: Pair[],
     currencyIn: Currency,

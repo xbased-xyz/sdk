@@ -3,46 +3,26 @@ import invariant from 'tiny-invariant'
 import { validateAndParseAddress } from './utils'
 import { CurrencyAmount, ETHER, Percent, Trade } from './entities'
 
-/**
- * Options for producing the arguments to send call to the router.
- */
 export interface TradeOptions {
-  /**
-   * How much the execution price is allowed to move unfavorably from the trade execution price.
-   */
+  // how much the execution price is allowed to move unfavorably from the trade execution price
   allowedSlippage: Percent
-  /**
-   * How long the swap is valid until it expires, in seconds.
-   * This will be used to produce a `deadline` parameter which is computed from when the swap call parameters
-   * are generated.
-   */
+  // how long the swap is valid until it expires, in seconds
+  // this will be used to produce a `deadline` parameter which is computed from when the swap call parameters
+  // are generated.
   ttl: number
-  /**
-   * The account that should receive the output of the swap.
-   */
+  // the account that should receive the output of the swap
   recipient: string
 
-  /**
-   * Whether any of the tokens in the path are fee on transfer tokens, which should be handled with special methods
-   */
+  // whether any of the tokens in the path are fee on transfer tokens, which should be handled with special methods
   feeOnTransfer?: boolean
 }
 
-/**
- * The parameters to use in the call to the Uniswap V2 Router to execute a trade.
- */
 export interface SwapParameters {
-  /**
-   * The method to call on the Uniswap V2 Router.
-   */
+  // the method to call on the Uniswap V2 Router
   methodName: string
-  /**
-   * The arguments to pass to the method, all hex encoded.
-   */
+  // the arguments to pass to the method, all hex encoded
   args: (string | string[])[]
-  /**
-   * The amount of wei to send in hex.
-   */
+  // the amount of wei to send in hex
   value: string
 }
 
@@ -66,8 +46,8 @@ export abstract class Router {
    * @param options options for the call parameters
    */
   public static swapCallParameters(trade: Trade, options: TradeOptions): SwapParameters {
-    const etherIn = trade.inputAmount.currency === ETHER[trade.route.pairs[0].chainId]
-    const etherOut = trade.outputAmount.currency === ETHER[trade.route.pairs[0].chainId]
+    const etherIn = trade.inputAmount.currency === ETHER
+    const etherOut = trade.outputAmount.currency === ETHER
     // the router does not support both ether in and out
     invariant(!(etherIn && etherOut), 'ETHER_IN_OUT')
     invariant(options.ttl > 0, 'TTL')
