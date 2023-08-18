@@ -21,6 +21,7 @@ var _FACTORY_ADDRESS, _SOLIDITY_TYPE_MAXIMA;
 (function (ChainId) {
   ChainId[ChainId["SEPOLIA"] = 11155111] = "SEPOLIA";
   ChainId[ChainId["BASE"] = 8453] = "BASE";
+  // LOCAL  = 31337
 })(exports.ChainId || (exports.ChainId = {}));
 (function (TradeType) {
   TradeType[TradeType["EXACT_INPUT"] = 0] = "EXACT_INPUT";

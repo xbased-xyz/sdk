@@ -17,6 +17,7 @@ var ChainId;
 (function (ChainId) {
   ChainId[ChainId["SEPOLIA"] = 11155111] = "SEPOLIA";
   ChainId[ChainId["BASE"] = 8453] = "BASE";
+  // LOCAL  = 31337
 })(ChainId || (ChainId = {}));
 var TradeType;
 (function (TradeType) {
