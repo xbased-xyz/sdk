@@ -26,7 +26,7 @@ export const FACTORY_ADDRESS = {
   [ChainId.BASE]: "0xC3550497E591Ac6ed7a7E03ffC711CfB7412E57F", // TODO: to be deployed
 }
 
-export const INIT_CODE_HASH = '0xeaffb02e0852e2391eea302a843b596991773e7df7182de2a2404f263c6e4b10'
+export const INIT_CODE_HASH = '0x98e357a72fa474308ab79840ad29aa35db695d09c01df1b74a7d401994761bcf'
 
 export const MINIMUM_LIQUIDITY = JSBI.BigInt(1000)
 
