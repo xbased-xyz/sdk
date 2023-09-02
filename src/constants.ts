@@ -35,7 +35,8 @@ export type ChainMap<T> = {
 };
 
 export const FACTORY_ADDRESS = Object.keys(deployed).reduce((prev, curr) => {
-  (prev as any)[curr] = (deployed as any)[curr].Factory;
+  const chainId = (curr as unknown) as ChainId
+  (prev as any)[curr] = (deployed as any)[chainId].Factory;
   return prev;
 }, {} as ChainMap<string>)
 
