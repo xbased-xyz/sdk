@@ -40,7 +40,7 @@ export class Pair {
           [tokens[1].address]: getCreate2Address(
             factoryAddress,
             keccak256(['bytes'], [pack(['address', 'address'], [tokens[0].address, tokens[1].address])]),
-            process.env.INIT_CODE_HASH || INIT_CODE_HASH
+            process.env.INIT_CODE_HASH || process.env.REACT_APP_INIT_CODE_HASH || INIT_CODE_HASH
           )
         }
       }
