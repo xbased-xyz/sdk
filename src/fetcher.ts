@@ -50,7 +50,7 @@ export abstract class Fetcher {
             }
             return decimals
           })
-    return new Token(chainId, address, parsedDecimals, symbol, name)
+    return new Token(+chainId, address, parsedDecimals, symbol, name)
   }
 
   /**

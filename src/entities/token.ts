@@ -20,11 +20,12 @@ export class Token extends Currency {
    * Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
    * @param other other token to compare
    */
-  public equals(other: Token): boolean {
+  public equals(other?: Token): boolean {
     // short circuit on reference equality
     if (this === other) {
       return true
     }
+    if (!other) return false
     return this.chainId === other.chainId && this.address === other.address
   }
 
@@ -35,7 +36,7 @@ export class Token extends Currency {
    * @throws if the tokens are on different chains
    */
   public sortsBefore(other: Token): boolean {
-    invariant(this.chainId === other.chainId, 'CHAIN_IDS')
+    invariant(this.chainId === other.chainId, `CHAIN_IDS: [${this.chainId}, ${other?.chainId}]`)
     invariant(this.address !== other.address, 'ADDRESSES')
     return this.address.toLowerCase() < other.address.toLowerCase()
   }
@@ -59,7 +60,7 @@ export function currencyEquals(currencyA: Currency, currencyB: Currency): boolea
 export const WETH =
   Object.keys(deployed).reduce((prev, curr) => {
     const chainId = curr as unknown as ChainId
-    (prev as any)[curr] = new Token(chainId, (deployed as any)[curr].WETH9, 18, 'WETH', 'Wrapped Ether')
+    (prev as any)[curr] = new Token(+chainId, (deployed as any)[curr].WETH9, 18, 'WETH', 'Wrapped Ether')
     return prev;
   }, {} as ChainMap<Token>)
 // {
