@@ -2,7 +2,7 @@ import invariant from 'tiny-invariant'
 import { ChainId, ChainMap } from '../constants'
 import { validateAndParseAddress } from '../utils'
 import { Currency } from './currency'
-import deployed from '../deployed'
+import { deployed } from '../deployed'
 /**
  * Represents an ERC20 token with a unique address and some metadata.
  */

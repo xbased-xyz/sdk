@@ -1,5 +1,5 @@
 import JSBI from 'jsbi'
-import deployed from './deployed'
+import { deployed } from './deployed'
 
 // exports for external consumption
 export type BigintIsh = JSBI | bigint | string

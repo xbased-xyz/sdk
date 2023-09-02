@@ -19,7 +19,7 @@ export enum XBasedContracts {
   "StakingFactory"
 }
 
-const deployed: DeployedMultichainContracts = {
+export const deployed: DeployedMultichainContracts = {
   "8453": {
     "WETH9": "0x4200000000000000000000000000000000000006",
     "Multicall3": "0xcA11bde05977b3631167028862bE2a173976CA11",
@@ -44,5 +44,3 @@ const deployed: DeployedMultichainContracts = {
     "StakingFactory": "0xD405C728a281954d38E0b3Ac07eF3263B9f1634f"
   }
 }
-
-export default deployed
