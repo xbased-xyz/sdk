@@ -1,4 +1,5 @@
 import JSBI from 'jsbi'
+import deployed from './deployed'
 
 // exports for external consumption
 export type BigintIsh = JSBI | bigint | string
@@ -6,8 +7,17 @@ export type BigintIsh = JSBI | bigint | string
 export enum ChainId {
   SEPOLIA = 11155111,
   BASE = 8453,
-  // LOCAL  = 31337
+  BASE_GOERLI = 84531,
+  HARDHAT = 31337
 }
+
+export const SUPPORTED_CHAINS = [
+  ChainId.SEPOLIA,
+  ChainId.BASE,
+  ChainId.BASE_GOERLI,
+  ChainId.HARDHAT
+] as const
+export type SupportedChainsType = typeof SUPPORTED_CHAINS[number]
 
 export enum TradeType {
   EXACT_INPUT,
@@ -20,11 +30,14 @@ export enum Rounding {
   ROUND_UP
 }
 
-// TODO: FACTORY_ADDRESS
-export const FACTORY_ADDRESS = {
-  [ChainId.SEPOLIA]: "0xDaD39353Cb8A16CDbC70c01234Bf2CFbcD644F3a",
-  [ChainId.BASE]: "0xC3550497E591Ac6ed7a7E03ffC711CfB7412E57F", // TODO: to be deployed
-}
+export type ChainMap<T> = {
+  [key in ChainId]?: T;
+};
+
+export const FACTORY_ADDRESS = Object.keys(deployed).reduce((prev, curr) => {
+  (prev as any)[curr] = (deployed as any)[curr].Factory;
+  return prev;
+}, {} as ChainMap<string>)
 
 export const INIT_CODE_HASH = '0x98e357a72fa474308ab79840ad29aa35db695d09c01df1b74a7d401994761bcf'
 

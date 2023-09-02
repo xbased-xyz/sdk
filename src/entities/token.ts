@@ -1,8 +1,8 @@
 import invariant from 'tiny-invariant'
-import { ChainId } from '../constants'
+import { ChainId, ChainMap } from '../constants'
 import { validateAndParseAddress } from '../utils'
 import { Currency } from './currency'
-
+import deployed from '../deployed'
 /**
  * Represents an ERC20 token with a unique address and some metadata.
  */
@@ -56,7 +56,13 @@ export function currencyEquals(currencyA: Currency, currencyB: Currency): boolea
   }
 }
 
-export const WETH = {
-  [ChainId.SEPOLIA]: new Token(ChainId.SEPOLIA, '0xC53341A203ADFD60174A534CAc03141237Cdf92a', 18, 'WETH', 'Wrapped Ether'),
-  [ChainId.BASE]: new Token(ChainId.BASE, '0x4200000000000000000000000000000000000006', 18, 'WETH', 'Wrapped Ether'),
-}
+export const WETH =
+  Object.keys(deployed).reduce((prev, curr) => {
+    const chainId = curr as unknown as ChainId
+    (prev as any)[curr] = new Token(chainId, (deployed as any)[curr].WETH9, 18, 'WETH', 'Wrapped Ether')
+    return prev;
+  }, {} as ChainMap<Token>)
+// {
+//   [ChainId.SEPOLIA]: new Token(ChainId.SEPOLIA, '0xC53341A203ADFD60174A534CAc03141237Cdf92a', 18, 'WETH', 'Wrapped Ether'),
+//   [ChainId.BASE]: new Token(ChainId.BASE, '0x4200000000000000000000000000000000000006', 18, 'WETH', 'Wrapped Ether'),
+// }
