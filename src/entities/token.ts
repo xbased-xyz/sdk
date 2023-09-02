@@ -63,7 +63,3 @@ export const WETH =
     (prev as any)[curr] = new Token(+chainId, (deployed as any)[curr].WETH9, 18, 'WETH', 'Wrapped Ether')
     return prev;
   }, {} as ChainMap<Token>)
-// {
-//   [ChainId.SEPOLIA]: new Token(ChainId.SEPOLIA, '0xC53341A203ADFD60174A534CAc03141237Cdf92a', 18, 'WETH', 'Wrapped Ether'),
-//   [ChainId.BASE]: new Token(ChainId.BASE, '0x4200000000000000000000000000000000000006', 18, 'WETH', 'Wrapped Ether'),
-// }
