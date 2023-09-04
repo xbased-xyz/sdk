@@ -58,7 +58,7 @@ export class Pair {
       Pair.getAddress(tokenAmounts[0].token, tokenAmounts[1].token),
       18,
       'XBD-V2',
-      'XBased V2'
+      'XBased LP'
     )
     this.tokenAmounts = tokenAmounts as [TokenAmount, TokenAmount]
   }
