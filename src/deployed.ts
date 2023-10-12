@@ -29,7 +29,7 @@ export const deployed: DeployedMultichainContracts = {
     "USDbC": "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA",
     "DAI": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
     "Multicall3": "0xcA11bde05977b3631167028862bE2a173976CA11",
-    "XBD": "0x265a65AD2d2F9c6C7482a76f53B79eF12954c46f",
+    "XBD": "0x265a65AD2d2F9c6C7482a76f53B79eF12954  c46f",
     "StakingBlueprint": "0xB0c3365Be08A3db4fDCEBc6b5b687f8B44B82c17",
     "StakingFactory": "0xEff504690F25213C393bF30215cA6A7E10e9F47A"
   },
@@ -54,6 +54,7 @@ export const deployed: DeployedMultichainContracts = {
     "Multicall3": "0xcA11bde05977b3631167028862bE2a173976CA11",
     "XBD": "0xd7F6C717C017468c616D44bD29FB79b78152b43b",
     "StakingBlueprint": "0xE80090B9b5e376aD612fD3000566269152322ACc",
-    "StakingFactory": "0xcba2c8f9BC4b6c9f0056804aC6BeCf081d14B7a2"
+    "StakingFactory": "0xcba2c8f9BC4b6c9f0056804aC6BeCf081d14B7a2",
+    "AirdropFactory": "0x440eE34EC86D6648aa918f8fddD041d27f0245B6"
   }
 }
